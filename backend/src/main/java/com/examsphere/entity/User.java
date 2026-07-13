@@ -1,6 +1,9 @@
 package com.examsphere.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -10,15 +13,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fullName;
+    @NotBlank(message = "Full Name is required")
+private String fullName;
 
-    @Column(unique = true)
-    private String email;
+    @Email(message = "Invalid email format")
+@NotBlank(message = "Email is required")
+private String email;
 
-    private String password;
+    @Size(min = 6, message = "Password must be at least 6 characters")
+private String password;
 
-    private String role;
-
+    @NotBlank(message = "Role is required")
+private String role;
     public User() {
     }
 
