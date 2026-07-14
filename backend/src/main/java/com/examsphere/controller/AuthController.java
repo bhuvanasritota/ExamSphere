@@ -5,7 +5,8 @@ import com.examsphere.entity.User;
 import com.examsphere.service.UserService;
 
 import jakarta.validation.Valid;
-
+import com.examsphere.dto.UserRequest;
+import com.examsphere.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
@@ -29,8 +30,10 @@ private UserService userService;
         return "Student Added Successfully";
     }
     @PostMapping("/users")
-public User saveUser(@Valid @RequestBody User user) {
-    return userService.saveUser(user);
+public UserResponse saveUser(@Valid @RequestBody UserRequest request) {
+
+    return userService.saveUser(request);
+
 }
 @GetMapping("/users")
 public List<User> getAllUsers() {

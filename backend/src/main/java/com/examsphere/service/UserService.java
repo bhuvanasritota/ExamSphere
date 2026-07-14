@@ -1,10 +1,11 @@
 package com.examsphere.service;
-
+import com.examsphere.exception.UserNotFoundException;
 import com.examsphere.entity.User;
 import com.examsphere.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.examsphere.dto.UserRequest;
+import com.examsphere.dto.UserResponse;
 import java.util.List;
 
 @Service
@@ -25,8 +26,12 @@ public class UserService {
 
     // Get User By ID
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
+
+    return userRepository.findById(id)
+            .orElseThrow(() ->
+                    new UserNotFoundException("User with ID " + id + " not found"));
+
+}
 
     // Update User
     public User updateUser(Long id, User updatedUser) {
@@ -49,5 +54,25 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+    public UserResponse saveUser(UserRequest request) {
+
+    User user = new User();
+
+    user.setFullName(request.getFullName());
+    user.setEmail(request.getEmail());
+    user.setPassword(request.getPassword());
+    user.setRole(request.getRole());
+
+    User savedUser = userRepository.save(user);
+
+    UserResponse response = new UserResponse();
+
+    response.setId(savedUser.getId());
+    response.setFullName(savedUser.getFullName());
+    response.setEmail(savedUser.getEmail());
+    response.setRole(savedUser.getRole());
+
+    return response;
+}
 
 }
