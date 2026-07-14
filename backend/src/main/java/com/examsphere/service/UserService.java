@@ -4,6 +4,7 @@ import com.examsphere.entity.User;
 import com.examsphere.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 import com.examsphere.dto.UserRequest;
 import com.examsphere.dto.UserResponse;
 import java.util.List;
@@ -13,6 +14,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+private ModelMapper modelMapper;
 
     // Save User
     public User saveUser(User user) {
@@ -56,23 +59,11 @@ public class UserService {
     }
     public UserResponse saveUser(UserRequest request) {
 
-    User user = new User();
-
-    user.setFullName(request.getFullName());
-    user.setEmail(request.getEmail());
-    user.setPassword(request.getPassword());
-    user.setRole(request.getRole());
+    User user = modelMapper.map(request, User.class);
 
     User savedUser = userRepository.save(user);
 
-    UserResponse response = new UserResponse();
+    return modelMapper.map(savedUser, UserResponse.class);
 
-    response.setId(savedUser.getId());
-    response.setFullName(savedUser.getFullName());
-    response.setEmail(savedUser.getEmail());
-    response.setRole(savedUser.getRole());
-
-    return response;
 }
-
 }
