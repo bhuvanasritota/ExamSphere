@@ -23,8 +23,9 @@ private String email;
     @Size(min = 6, message = "Password must be at least 6 characters")
 private String password;
 
-    @NotBlank(message = "Role is required")
-private String role;
+   @ManyToOne
+@JoinColumn(name = "role_id")
+private Role role;
     public User() {
     }
 
@@ -59,12 +60,11 @@ private String role;
     public void setPassword(String password) {
         this.password = password;
     }
+public Role getRole() {
+    return role;
+}
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+public void setRole(Role role) {
+    this.role = role;
+}
 }

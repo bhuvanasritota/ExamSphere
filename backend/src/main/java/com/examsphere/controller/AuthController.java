@@ -1,9 +1,11 @@
 package com.examsphere.controller;
-
+import com.examsphere.dto.LoginRequest;
+import com.examsphere.dto.LoginResponse;
 import org.springframework.web.bind.annotation.*;
 import com.examsphere.entity.User;
 import com.examsphere.service.UserService;
-
+import com.examsphere.entity.Role;
+import com.examsphere.service.RoleService;
 import jakarta.validation.Valid;
 import com.examsphere.dto.UserRequest;
 import com.examsphere.dto.UserResponse;
@@ -29,31 +31,36 @@ private UserService userService;
     public String addStudent() {
         return "Student Added Successfully";
     }
-    @PostMapping("/users")
+    @PostMapping("/register")
 public UserResponse saveUser(@Valid @RequestBody UserRequest request) {
 
+    System.out.println("Controller called");
+    System.out.println("Full Name = " + request.getFullName());
+    System.out.println("Email = " + request.getEmail());
+    System.out.println("Password = " + request.getPassword());
+    System.out.println("Role ID = " + request.getRoleId());
+
     return userService.saveUser(request);
-
 }
-@GetMapping("/users")
-public List<User> getAllUsers() {
-    return userService.getAllUsers();
-}
+@PostMapping("/login")
+public LoginResponse login(@RequestBody LoginRequest request) {
 
-@GetMapping("/users/{id}")
-public User getUserById(@PathVariable Long id) {
-    return userService.getUserById(id);
+    System.out.println("Login API Called");
+    System.out.println("Email = " + request.getEmail());
+
+    return userService.login(request);
 }
 
-@PutMapping("/users/{id}")
-public User updateUser(@PathVariable Long id,
-                       @RequestBody User user) {
-    return userService.updateUser(id, user);
+@Autowired
+private RoleService roleService;
+
+@PostMapping("/roles")
+public Role saveRole(@RequestBody Role role) {
+    return roleService.saveRole(role);
 }
 
-@DeleteMapping("/users/{id}")
-public String deleteUser(@PathVariable Long id) {
-    userService.deleteUser(id);
-    return "User Deleted Successfully";
+@GetMapping("/roles")
+public List<Role> getAllRoles() {
+    return roleService.getAllRoles();
 }
 }
